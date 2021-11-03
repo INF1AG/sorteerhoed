@@ -1,4 +1,3 @@
-from numpy import NaN
 from dotenv import load_dotenv
 import pandas
 import itertools
@@ -14,28 +13,28 @@ def get_column(wb, name):
 	return pandas.DataFrame(wb, columns=[name]).values.tolist()
 
 def read_question_data(excel_path):
-	loc = excel_path
-	wb = pandas.read_excel(loc)
-	questions = get_column(wb, "question")
+	location = excel_path
+	workbook = pandas.read_excel(location)
+	questions = get_column(workbook, "question")
 	questions = [x for x in questions if not pandas.isna(x)]
 
-	options = list(itertools.chain.from_iterable(get_column(wb, "option")))
-	answers = list(itertools.chain.from_iterable(get_column(wb, "answer")))
-	points = pandas.DataFrame(wb, columns=["SE", "BDaM", "IaT", "FICT"])
+	options = list(itertools.chain.from_iterable(get_column(workbook, "option")))
+	answers = list(itertools.chain.from_iterable(get_column(workbook, "answer")))
+	points = pandas.DataFrame(workbook, columns=["SE", "BDaM", "IaT", "FICT"])
 	constructed_answers = list(zip(options, answers, map(lambda x: tuple(x), points.iloc)))
 
 	answer_lists = []
 
-	for i in range(0, len(constructed_answers)):
-		if pandas.isna(constructed_answers[i][0]): continue
-		if constructed_answers[i][0].startswith("A"):
+	for answer_index in range(0, len(constructed_answers)):
+		if pandas.isna(constructed_answers[answer_index][0]): continue
+		if constructed_answers[answer_index][0].startswith("A"):
 			answer_lists.append([])
-		answer_lists[-1].append(constructed_answers[i])
+		answer_lists[-1].append(constructed_answers[answer_index])
 
 	qa_pairs = []
 
-	for i in range(0, len(questions)):
-		qa_pairs.append(Question(questions[i][0], answer_lists[i]))
+	for question_index in range(0, len(questions)):
+		qa_pairs.append(Question(questions[question_index][0], answer_lists[question_index]))
 
 	return qa_pairs
 
