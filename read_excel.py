@@ -1,7 +1,5 @@
-from dotenv import load_dotenv
 import pandas
 import itertools
-import os
 
 class Question: 
 	def __init__(self, question, answers):
@@ -37,7 +35,3 @@ def read_question_data(excel_path):
 		qa_pairs.append(Question(questions[question_index][0], answer_lists[question_index]))
 
 	return qa_pairs
-
-if __name__ == '__main__':
-	load_dotenv()
-	print(read_question_data(os.getenv("EXCEL_PATH")))

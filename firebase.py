@@ -1,4 +1,5 @@
 import firebase_admin
+import uuid
 from firebase_admin import credentials
 from firebase_admin import firestore
 
@@ -10,7 +11,7 @@ def send_data(username, points):
 
 	db = firestore.client()
 	ref = db.collection(u'thdnrsorteerhoed')
-	document = ref.document(u'test')
+	document = ref.document(str(uuid.uuid4()))
 	document.set({
 		u'username': username,
 		u'points': points
